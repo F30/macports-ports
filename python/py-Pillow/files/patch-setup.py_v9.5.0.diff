@@ -1,6 +1,6 @@
---- setup.py.orig	2023-10-15 10:57:48
-+++ setup.py	2023-11-02 18:42:59
-@@ -523,52 +523,8 @@
+--- setup.py.orig	2021-10-15 09:26:23.000000000 +0300
++++ setup.py	2021-10-16 16:06:42.000000000 +0300
+@@ -510,52 +510,9 @@ class pil_build_ext(build_ext):
              )
  
          elif sys.platform == "darwin":
@@ -10,7 +10,7 @@
 -            # fink installation directories
 -            _add_directory(library_dirs, "/sw/lib")
 -            _add_directory(include_dirs, "/sw/include")
--            # darwin ports installation directories
+             # darwin ports installation directories
 -            _add_directory(library_dirs, "/opt/local/lib")
 -            _add_directory(include_dirs, "/opt/local/include")
 -
