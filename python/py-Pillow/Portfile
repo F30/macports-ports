@@ -74,9 +74,23 @@ if {${name} ne ${subport}} {
     } else {
         patchfiles-append   patch-setup.py.diff
 
-        build.args-append   --disable-raqm \
-                            --disable-imagequant \
+        build.args-append   --disable-imagequant \
+                            --disable-freetype \
+                            --disable-jpeg2000 \
+                            --disable-raqm \
                             --disable-xcb
+
+        default_variants +freetype +jpeg2000 +olefile +tkinter
+
+        variant freetype description {build with FreeType support} {
+            build.args-delete      --disable-freetype
+            depends_lib-append     port:freetype
+        }
+
+        variant jpeg2000 description {build with support for JPEG 2000 images} {
+            build.args-delete      --disable-jpeg2000
+            depends_lib-append     port:openjpeg
+        }
 
         variant raqm description {build with raqm feature} {
             build.args-delete      --disable-raqm
@@ -87,21 +101,25 @@ if {${name} ne ${subport}} {
             build.args-delete      --disable-xcb
             depends_lib-append     port:xorg-libxcb
         }
+
+        variant olefile description {add support for FPX and MIC images} {
+            depends_lib-append     port:py${python.version}-olefile
+        }
+
+        variant tkinter description {add support for tk images} {
+            depends_lib-append     port:py${python.version}-tkinter
+        }
     }
 
     build.target        build_ext
 
     depends_build-append \
                         port:py${python.version}-setuptools
-    depends_lib-append  port:py${python.version}-tkinter \
-                        port:py${python.version}-olefile \
-                        port:zlib \
+    depends_lib-append  port:zlib \
                         path:include/turbojpeg.h:libjpeg-turbo \
                         port:tiff \
                         port:lcms2 \
-                        port:webp \
-                        port:openjpeg \
-                        port:freetype
+                        port:webp
 
     post-patch {
         reinplace "s|@prefix@|${prefix}|g" ${worksrcpath}/setup.py
